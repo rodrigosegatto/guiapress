@@ -7,7 +7,7 @@ Em base de testes crie um arquivo duplique o arquivo `.env` com nome de `.env.te
 
 Preencha as variaveis de ambiente como exemplo abaixo.
 
-```env
+```printenv
     PORT=3000
 
     # Database
