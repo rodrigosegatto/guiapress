@@ -1,0 +1,44 @@
+<%- include('../../partials/header.ejs') %>
+<%- include('../../partials/navbar.ejs') %>
+<div class="container">
+    <hr>
+    <div class="card">
+        <div class="card-header">
+            <h2>Editar Artigo</h2>
+        </div>
+        <div class="card-body">
+            <form action="/admin/articles/save" method="POST">
+                <input type="hidden" value="<%=article.id%>" name="id" />
+                <input type="text" class="form-control" value="<%=article.title%>" name="title" placeholder="Defina o título do artigo"><br>
+                <textarea name="body" class="form-control" id="body" placeholder="Escreva o artigo aqui"><%=article.body%></textarea><br>
+                <label>Categoria</label>
+                <select name="categoryId" class="form-control">
+                    <% categories.forEach((category) => { %>
+                        <% if(article.categoryId === category.id) var select = "selected" %> 
+                        <option <%=select%> value="<%=category.id%>"><%=category.title%></option>
+                    <% }) %>
+                </select><br>
+                <button type="submit" class="btn btn-success">Atualizar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../../partials/footer.ejs') %>
+
+<script src="https://cdn.tiny.cloud/1/ecmv8248o2e20fx7h84i7icarjyjmyxmsfee34jqoatzjczr/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+
+    tinymce.init({
+        selector: "#body",
+        plugins: [
+            'textpattern a11ychecker tinycomments tinymcespellchecker media mediaembed pageembed permanentpen powerpaste checklist advcode casechange formatpainter linkchecker autolink advlist autolink link image lists print preview hr searchreplace wordcount fullscreen insertdatetime media save table paste emoticons'
+        ],
+        toolbar: 'a11ycheck addcomment showcomments casechange checklist code formatpainter pageembed permanentpen table',
+        toolbar_mode: 'floating',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'DesignRS',
+        language: 'pt_BR'
+    })
+</script>
+

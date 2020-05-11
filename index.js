@@ -38,12 +38,24 @@ app.use('/', CategoriesController); //Dizendo que queremos utilizar as rotas do 
 app.use('/', ArticlesController); 
 
 //Definindo uma rota inicial
-app.get('/',(req,res) => {
-    ArticleModel.findAll({
-        order: [['id','DESC']]
+app.get('/:page?',(req,res) => {
+    const {page = 1} = req.params;
+    
+    var offset = parseInt(page-1) * 3;
+    if(isNaN(page) || page == 1)
+        offset = 0;
+
+    ArticleModel.findAndCountAll({
+        order: [['id','DESC']],
+        limit: 3,
+        offset: offset
     }).then(articles => { 
+        var next = true;
+        if(offset + 3 >= articles.count)
+            var next = false;
+        
         CategoryModel.findAll().then(categories => {
-            res.render('index', {articles, categories});
+            res.render('index', {page: parseInt(page), next, articles, categories});
         });       
     })
 });

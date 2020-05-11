@@ -6,7 +6,7 @@
         <p class="lead">Ete é um simples blog do guia do programador!</p>
     </div>
     <hr>
-    <% articles.forEach(article => { %>
+    <% articles.rows.forEach(article => { %>
         <div class="card">
             <div class="card-header">
                 <h2><%= article.title %> </h2>
@@ -17,5 +17,19 @@
         </div>
         <br>
     <% }) %>  
+    <div class="row">
+        <div class="col col-12">
+            <% if(page > 1){ %> 
+                <% if(page > 2){ %> 
+                    <a class="float-left" href="/">Inicio </a>
+                <% } %>
+                <a class="float-left" href="/<%= page - 1 %>"> <<< Prev</a>
+            <% } %>
+            <% if(next){ %> 
+                <a class="float-right" href="/<%= page + 1 %>">Next >>></a>
+            <% } %>
+        </div>
+    </div>
+    <br>
 </div>
 <%- include('partials/footer.ejs') %>
