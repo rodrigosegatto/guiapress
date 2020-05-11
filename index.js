@@ -7,6 +7,7 @@ const app = express();
 //Controllers
 const CategoriesController = require('./controllers/CategoriesController');
 const ArticlesController = require('./controllers/ArticlesController');
+const UsersController = require('./controllers/UsersController');
 
 //Models
 const CategoryModel = require('./models/CategoryModel');
@@ -36,6 +37,7 @@ conn.authenticate()
 //Usando as rotas de controllers
 app.use('/', CategoriesController); //Dizendo que queremos utilizar as rotas do arquivo controller
 app.use('/', ArticlesController); 
+app.use('/', UsersController); 
 
 //Definindo uma rota inicial
 app.get('/:page?',(req,res) => {
