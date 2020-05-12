@@ -9,6 +9,7 @@ Preencha as variaveis de ambiente como exemplo abaixo.
 
 ```printenv
     PORT=3000
+    SECRET=123odiasd091u23 
 
     # Database
     DB_USER=root
