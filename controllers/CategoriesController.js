@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const Category = require('../models/CategoryModel');
+const adminAuth = require('../middlewares/adminAuth');
 const slugify = require('slugify');
 
-router.get('/admin/categories', (req, res) => {
+router.get('/admin/categories', adminAuth, (req, res) => {
     Category.findAll().then(categories => {
         res.render('admin/categories/index', {categories});
     })
 });
 
-router.get('/admin/categories/new', (req, res) => {
+router.get('/admin/categories/new', adminAuth, (req, res) => {
     res.render('admin/categories/new');
 });
 
-router.post('/admin/categories/save', (req, res) => {
+router.post('/admin/categories/save', adminAuth, (req, res) => {
     var {title, id} = req.body;
     
     if(!title)
@@ -28,7 +29,7 @@ router.post('/admin/categories/save', (req, res) => {
     });
 });
 
-router.get('/admin/categories/edit/:id', (req, res) => {
+router.get('/admin/categories/edit/:id', adminAuth, (req, res) => {
     const {id} = req.params;
 
     Category.findByPk(id).then(category => {
@@ -41,7 +42,7 @@ router.get('/admin/categories/edit/:id', (req, res) => {
     });
 });
 
-router.post('/admin/categories/delete', (req, res) => {
+router.post('/admin/categories/delete', adminAuth, (req, res) => {
     const {id} = req.body;
 
     //Not ID ou Not a Number

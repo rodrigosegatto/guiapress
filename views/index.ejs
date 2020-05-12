@@ -17,19 +17,21 @@
         </div>
         <br>
     <% }) %>  
-    <div class="row">
-        <div class="col col-12">
-            <% if(page > 1){ %> 
-                <% if(page > 2){ %> 
-                    <a class="float-left" href="/">Inicio </a>
+    <% if(paginate){ %> 
+        <div class="row">
+            <div class="col col-12">
+                <% if(page > 1){ %> 
+                    <% if(page > 2){ %> 
+                        <a class="float-left" href="/">Inicio </a>
+                    <% } %>
+                    <a class="float-left" href="/<%= page - 1 %>"> <<< Prev</a>
                 <% } %>
-                <a class="float-left" href="/<%= page - 1 %>"> <<< Prev</a>
-            <% } %>
-            <% if(next){ %> 
-                <a class="float-right" href="/<%= page + 1 %>">Next >>></a>
-            <% } %>
+                <% if(next){ %> 
+                    <a class="float-right" href="/<%= page + 1 %>">Next >>></a>
+                <% } %>
+            </div>
         </div>
-    </div>
+    <% } %>
     <br>
 </div>
 <%- include('partials/footer.ejs') %>

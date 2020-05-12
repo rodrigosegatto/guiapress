@@ -1,6 +1,8 @@
 const express = require ('express');
 const configuration = require('./config/config');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const bcrypt = require('bcryptjs');
 const conn = require('./database/database');
 const app = express();
 
@@ -12,9 +14,18 @@ const UsersController = require('./controllers/UsersController');
 //Models
 const CategoryModel = require('./models/CategoryModel');
 const ArticleModel = require('./models/ArticleModel');
+const UserModel = require('./models/UserModel');
 
 //View Engine
 app.set('view engine','ejs');
+
+//Sessões
+app.use(session({
+    secret: configuration.secret,
+    cookie: {maxAge: 7200000}, //magAge - Tempo para deslogar em milisegundos (120 min)
+    resave: false,
+    saveUninitialized: false
+}));
 
 //Utilizar arquivos estáticos com express (Ex: css, js, imagens, etc..)
 app.use(express.static('public'));
@@ -31,6 +42,20 @@ conn.authenticate()
     .catch((error) => {
         console.log('Erro ao conectar no Banco de Dados')
     });
+
+//criar usuário admin caso não exista
+UserModel.findOne({
+    where: {email: configuration.userAdmin.email}
+}).then(user => {
+    if(!user){
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(configuration.userAdmin.password, salt);
+        UserModel.create({
+            email: configuration.userAdmin.email,
+            password: hash
+        });
+    }
+});
 
 //Rotas
 
@@ -55,9 +80,8 @@ app.get('/:page?',(req,res) => {
         var next = true;
         if(offset + 3 >= articles.count)
             var next = false;
-        
         CategoryModel.findAll().then(categories => {
-            res.render('index', {page: parseInt(page), next, articles, categories});
+            res.render('index', {page: parseInt(page), next, articles, categories, paginate: true});
         });       
     })
 });
@@ -90,7 +114,9 @@ app.get('/category/:slug', (req, res) => {
         if(!category)
             return res.redirect('/');
         CategoryModel.findAll().then(categories => {
-            res.render('index', {articles: category.articles, categories});
+            var articles = {};
+            articles.rows = category.articles;
+            res.render('index', {articles, categories, paginate: false});
         });
     }).catch(err => {
         res.redirect('/');

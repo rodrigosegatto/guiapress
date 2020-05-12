@@ -4,6 +4,11 @@ require('dotenv').config({
 
 module.exports = {
     port: process.env.PORT,
+    secret: process.env.SECRET,
+    userAdmin: {
+        email: process.env.USER_ADMIN_EMAIL,
+        password: process.env.USER_ADMIN_PASSWORD
+    },
     mysql_prod : {
         client: 'mysql',
         user: process.env.DB_USER,
